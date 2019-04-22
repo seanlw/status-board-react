@@ -5,6 +5,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   private emitQueued = false
 
+  private datetime: Date = new Date()
+
   protected emitUpdate() {
     if (this.emitQueued) {
       return
@@ -21,11 +23,13 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public getState(): IAppState {
     return {
-      
+      datetime: this.datetime
     }
   }
 
   public async loadInitialState() {
 
+
+    this.emitUpdateNow()
   }
 }

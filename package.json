@@ -50,6 +50,7 @@
     }
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "electron-window-state": "^5.0.3",
     "event-kit": "^2.5.3",
     "file-url": "^2.0.2",
@@ -59,6 +60,7 @@
     "source-map-support": "^0.5.9"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.7",
     "@types/event-kit": "^2.4.0",
     "@types/file-url": "^2.0.0",
     "@types/node": "^10.12.18",

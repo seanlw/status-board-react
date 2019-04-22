@@ -12,8 +12,8 @@ export class AppWindow {
   private window: Electron.BrowserWindow
   private emitter = new Emitter()
 
-  private minWidth: number = 992
-  private minHeight: number = 600
+  private minWidth: number = 810
+  private minHeight: number = 1080
 
   public constructor() {
     if (!windowStateKeeper) {
@@ -22,7 +22,8 @@ export class AppWindow {
 
     const savedWindowState = windowStateKeeper({
       defaultWidth: this.minWidth,
-      defaultHeight: this.minHeight
+      defaultHeight: this.minHeight,
+      file: 'status-board-window-state.json'
     })
 
     const windowOptions: Electron.BrowserWindowConstructorOptions = {
@@ -33,7 +34,9 @@ export class AppWindow {
       minWidth: this.minWidth,
       minHeight: this.minHeight,
       show: false,
-      backgroundColor: '#fff',
+      frame: false,
+      backgroundColor: '#101214',
+      resizable: false,
       webPreferences: {
         webSecurity: !__DEV__
       }

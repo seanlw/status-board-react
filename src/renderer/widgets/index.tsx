@@ -1,0 +1,8 @@
+export { ClockWidget } from './clock'
+export { WeatherWidget } from './weather'
+export { CalendarWidget } from './calendar'
+export { RSSWidget } from './rss'
+export { CountdownWidget } from './countdown'
+export { PingdomWidget } from './pingdom'
+export { UpcomingWidget } from './upcoming'
+export { BoardGameGeekPlaysWidget } from './board-game-geek-plays'

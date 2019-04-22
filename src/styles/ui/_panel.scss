@@ -1,0 +1,23 @@
+@mixin panel_size($width, $height) {
+  width: #{(260 * $width + (($width - 1) * 10))}px;
+  height: #{(260 * $height + (($height - 1) * 10))}px;
+  max-width: #{(260 * $width + (($width - 1) * 10))}px;
+  max-height: #{(260 * $height + (($height - 1) * 10))}px;
+  margin: 5px;
+  overflow: hidden;
+}
+
+.panel {
+  clear: both;
+  background-color: var(--panel-background-color);
+  color: var(--text-color);
+  overflow: hidden;
+
+  @for $i from 1 through 4 {
+    @for $j from 1 through 4 {
+      &.panel-size-#{$i}x#{$j} {
+        @include panel_size($i, $j)
+      }
+    }
+  }
+}
