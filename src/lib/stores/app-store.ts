@@ -28,8 +28,18 @@ export class AppStore extends TypedBaseStore<IAppState> {
   }
 
   public async loadInitialState() {
-
+    this.datetimeUpdater()
 
     this.emitUpdateNow()
+  }
+
+  private datetimeUpdater() {
+    window.setTimeout(() => {
+      const datetime = new Date()
+      this.datetime = datetime
+
+      this.emitUpdate()
+      this.datetimeUpdater()
+    }, 1000)
   }
 }
