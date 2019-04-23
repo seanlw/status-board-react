@@ -12,12 +12,43 @@
   background-color: var(--panel-background-color);
   color: var(--text-color);
   overflow: hidden;
+  line-height: normal;
 
   @for $i from 1 through 4 {
     @for $j from 1 through 4 {
       &.panel-size-#{$i}x#{$j} {
         @include panel_size($i, $j)
       }
+    }
+  }
+
+  .panel-title {
+    font-size: 20px;
+    margin: 0;
+    font-weight: normal;
+    padding: 11px 13px;
+
+    &.left {
+      text-align: left;
+    }
+
+    &.right {
+      text-align: right;
+    }
+
+    &.center {
+      text-align: center;
+    }
+  }
+
+  .panel-body {
+
+    &.padding {
+      padding: var(--panel-padding);
+    }
+
+    &.no-padding {
+      padding: 0;
     }
   }
 }

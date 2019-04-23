@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Panel } from '../panel';
 
+import { PanelSizeType } from '../../lib/app-state'
+
 interface IClockWidgetProps {
   readonly datetime: Date
 }
@@ -42,7 +44,8 @@ export class ClockWidget extends React.Component<IClockWidgetProps, IClockWidget
   public render() {
     return (
       <Panel
-        size={[1, 1]}
+        size={PanelSizeType.Size1x1}
+        noBodyPadding={true}
       >
         <ClockFace />
         <ClockHandHour

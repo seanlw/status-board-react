@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Panel } from '../panel';
 
+import { PanelSizeType } from '../../lib/app-state'
+
 interface IBoardGameGeekPlaysWidgetProps {
 
 }
@@ -10,7 +12,7 @@ export class BoardGameGeekPlaysWidget extends React.Component<IBoardGameGeekPlay
   public render() {
     return (
       <Panel
-        size={Array(3, 1)}
+        size={PanelSizeType.Size3x1}
       ></Panel>
     )
   }
