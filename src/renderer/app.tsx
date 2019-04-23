@@ -59,7 +59,9 @@ export class App extends React.Component<IAppProps, IAppState> {
             datetime={state.datetime}
           />
           <WeatherWidget />
-          <CalendarWidget />
+          <CalendarWidget
+            datetime={state.datetime}
+          />
         </Row>
         <Row>
           <RSSWidget />
