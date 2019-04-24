@@ -126,4 +126,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
     return Promise.resolve()
   }
 
+  public _setPreferencesBoardGameGeek(username: string): Promise<void> {
+    this.preferences.boardGameGeekUsername = username
+
+    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+
+    return Promise.resolve()
+  }
+
 }

@@ -31,4 +31,8 @@ export class Dispatcher {
   public setPreferencesUpcoming(url: string): Promise<void> {
     return this.appStore._setPreferencesUpcoming(url)
   }
+
+  public setPreferencesBoardGameGeek(username: string): Promise<void> {
+    return this.appStore._setPreferencesBoardGameGeek(username)
+  }
 }

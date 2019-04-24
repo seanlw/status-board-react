@@ -8,6 +8,7 @@ import { Button, ButtonGroup } from '../button'
 import { DarkSkyPreferences } from './dark-sky'
 import { CountdownPreferences } from './countdown'
 import { UpcomingPreferences } from './upcoming';
+import { BoardGameGeekPreferences } from './boardgamegeek';
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -27,6 +28,7 @@ interface IPreferencesState {
   readonly countdownTime: string
 
   readonly upcomingUrl: string
+  readonly boardGameGeekUsername: string
 }
 
 export class Preferences extends React.Component<
@@ -44,7 +46,8 @@ export class Preferences extends React.Component<
       countdownTitle: this.props.preferences.countdown.title,
       countdownDate: this.props.preferences.countdown.date,
       countdownTime: this.props.preferences.countdown.time,
-      upcomingUrl: this.props.preferences.upcomingUrl
+      upcomingUrl: this.props.preferences.upcomingUrl,
+      boardGameGeekUsername: this.props.preferences.boardGameGeekUsername
     }
   }
 
@@ -63,6 +66,10 @@ export class Preferences extends React.Component<
 
     this.props.dispatcher.setPreferencesUpcoming(
       this.state.upcomingUrl
+    )
+
+    this.props.dispatcher.setPreferencesBoardGameGeek(
+      this.state.boardGameGeekUsername
     )
 
     this.props.onDismissed()
@@ -146,7 +153,10 @@ export class Preferences extends React.Component<
         )
       case PreferencesTab.BoardGameGeek:
         return (
-          <div>BGG</div>
+          <BoardGameGeekPreferences
+            username={this.state.boardGameGeekUsername}
+            onUsernameChanged={this.onBoardGameGeekUsernameChanged}
+          />
         )
     }
   }
@@ -181,5 +191,9 @@ export class Preferences extends React.Component<
 
   private onUpcomingUrlChanged = (url: string) => {
     this.setState({ upcomingUrl: url })
+  }
+
+  private onBoardGameGeekUsernameChanged = (name: string) => {
+    this.setState({ boardGameGeekUsername: name })
   }
 }
