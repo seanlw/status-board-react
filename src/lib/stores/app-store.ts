@@ -118,4 +118,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
     return Promise.resolve()
   }
 
+  public _setPreferencesUpcoming(url: string): Promise<void> {
+    this.preferences.upcomingUrl = url
+
+    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+
+    return Promise.resolve()
+  }
+
 }

@@ -27,4 +27,8 @@ export class Dispatcher {
   public setPreferencesCountdown(title: string, date: string, time: string): Promise<void> {
     return this.appStore._setPreferencesCountdown(title, date, time)
   }
+
+  public setPreferencesUpcoming(url: string): Promise<void> {
+    return this.appStore._setPreferencesUpcoming(url)
+  }
 }

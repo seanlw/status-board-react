@@ -7,6 +7,7 @@ import { TabBar } from '../tab-bar'
 import { Button, ButtonGroup } from '../button'
 import { DarkSkyPreferences } from './dark-sky'
 import { CountdownPreferences } from './countdown'
+import { UpcomingPreferences } from './upcoming';
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -24,6 +25,8 @@ interface IPreferencesState {
   readonly countdownTitle: string
   readonly countdownDate: string
   readonly countdownTime: string
+
+  readonly upcomingUrl: string
 }
 
 export class Preferences extends React.Component<
@@ -40,7 +43,8 @@ export class Preferences extends React.Component<
       darkSkyLongitude: this.props.preferences.darksky.longitude,
       countdownTitle: this.props.preferences.countdown.title,
       countdownDate: this.props.preferences.countdown.date,
-      countdownTime: this.props.preferences.countdown.time
+      countdownTime: this.props.preferences.countdown.time,
+      upcomingUrl: this.props.preferences.upcomingUrl
     }
   }
 
@@ -55,6 +59,10 @@ export class Preferences extends React.Component<
       this.state.countdownTitle,
       this.state.countdownDate,
       this.state.countdownTime
+    )
+
+    this.props.dispatcher.setPreferencesUpcoming(
+      this.state.upcomingUrl
     )
 
     this.props.onDismissed()
@@ -116,7 +124,10 @@ export class Preferences extends React.Component<
         )
       case PreferencesTab.Upcoming:
         return (
-          <div>Upcoming</div>
+          <UpcomingPreferences
+            url={this.state.upcomingUrl}
+            onUrlChanged={this.onUpcomingUrlChanged}
+          />
         )
       case PreferencesTab.Countdown:
         return (
@@ -166,5 +177,9 @@ export class Preferences extends React.Component<
 
   private onCountdownTimeChanged = (time: string) => {
     this.setState({ countdownTime: time })
+  }
+
+  private onUpcomingUrlChanged = (url: string) => {
+    this.setState({ upcomingUrl: url })
   }
 }
