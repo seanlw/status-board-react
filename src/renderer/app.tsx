@@ -74,7 +74,12 @@ export class App extends React.Component<IAppProps, IAppState> {
         </Row>
         <Row>
           <RSSWidget />
-          <CountdownWidget />
+          <CountdownWidget
+            datetime={state.datetime}
+            title={state.preferences.countdown.title}
+            date={state.preferences.countdown.date}
+            time={state.preferences.countdown.time}
+          />
         </Row>
         <Row>
           <PingdomWidget />

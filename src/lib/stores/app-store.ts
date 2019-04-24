@@ -105,6 +105,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     localStorage.setItem('preferences', JSON.stringify(this.preferences))
 
+    this.emitUpdate()
     return Promise.resolve()
   }
 
@@ -115,6 +116,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     localStorage.setItem('preferences', JSON.stringify(this.preferences))
 
+    this.emitUpdate()
     return Promise.resolve()
   }
 
@@ -123,6 +125,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     localStorage.setItem('preferences', JSON.stringify(this.preferences))
 
+    this.emitUpdate()
     return Promise.resolve()
   }
 
@@ -131,6 +134,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     localStorage.setItem('preferences', JSON.stringify(this.preferences))
 
+    this.emitUpdate()
     return Promise.resolve()
   }
 
