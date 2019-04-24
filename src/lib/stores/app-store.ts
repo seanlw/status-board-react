@@ -1,11 +1,40 @@
-import { IAppState } from '../app-state'
+import {
+  IAppState,
+  Popup,
+  PopupType
+} from '../app-state'
 import { TypedBaseStore } from './base-store'
+import { IPreferences } from '../preferences';
+
+const defaultPreferences: IPreferences = {
+  countdown: {
+    title: '',
+    date: '',
+    time: ''
+  },
+  rss: [],
+  upcomingUrl: '',
+  pingdom: {
+    apiKey: '',
+    username: '',
+    password: '',
+    servers: []
+  },
+  darksky: {
+    apiKey: '',
+    latitude: null,
+    longitude: null
+  },
+  boardGameGeekUsername: ''
+}
 
 export class AppStore extends TypedBaseStore<IAppState> {
 
   private emitQueued = false
 
   private datetime: Date = new Date()
+  private currentPopup: Popup | null = null
+  private preferences: IPreferences = defaultPreferences
 
   protected emitUpdate() {
     if (this.emitQueued) {
@@ -23,12 +52,23 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public getState(): IAppState {
     return {
-      datetime: this.datetime
+      preferences: this.preferences,
+      datetime: this.datetime,
+      currentPopup: this.currentPopup
     }
   }
 
   public async loadInitialState() {
+    this.preferences = JSON.parse(
+      String(localStorage.getItem('preferences'))
+    ) as IPreferences
+
     this.datetimeUpdater()
+
+    if (!this.preferences) {
+      this.preferences = defaultPreferences
+      this._showPopup({ type: PopupType.Preferences })
+    }
 
     this.emitUpdateNow()
   }
@@ -42,4 +82,30 @@ export class AppStore extends TypedBaseStore<IAppState> {
       this.datetimeUpdater()
     }, 1000)
   }
+
+  public async _showPopup(popup: Popup): Promise<void> {
+    this._closePopup()
+
+    this.currentPopup = popup
+    this.emitUpdate()
+  }
+
+  public _closePopup(): Promise<any> {
+    this.currentPopup = null
+    this.emitUpdate()
+
+    return Promise.resolve()
+  }
+
+  public _setPreferencesDarkSky(apiKey: string, latitude: number, longitude: number): Promise<void> {
+
+    this.preferences.darksky.apiKey = apiKey
+    this.preferences.darksky.latitude = latitude
+    this.preferences.darksky.longitude = longitude
+
+    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+
+    return Promise.resolve()
+  }
+
 }

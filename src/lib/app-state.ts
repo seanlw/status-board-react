@@ -1,5 +1,12 @@
+import { IPreferences } from "./preferences";
+
+export type Popup =
+  | { type: PopupType.Preferences }
+
 export interface IAppState {
   readonly datetime: Date
+  readonly currentPopup: Popup | null
+  readonly preferences: IPreferences
 }
 
 export enum PanelSizeType {
@@ -12,3 +19,7 @@ export type TitleAlign =
   | 'left'
   | 'right'
   | 'center'
+
+export enum PopupType {
+  Preferences
+}
