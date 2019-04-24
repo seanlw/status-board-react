@@ -23,4 +23,8 @@ export class Dispatcher {
   public setPreferencesDarkSky(apiKey: string, latitude: number, longitude: number): Promise<void> {
     return this.appStore._setPreferencesDarkSky(apiKey, latitude, longitude)
   }
+
+  public setPreferencesCountdown(title: string, date: string, time: string): Promise<void> {
+    return this.appStore._setPreferencesCountdown(title, date, time)
+  }
 }

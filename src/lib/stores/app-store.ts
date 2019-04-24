@@ -108,4 +108,14 @@ export class AppStore extends TypedBaseStore<IAppState> {
     return Promise.resolve()
   }
 
+  public _setPreferencesCountdown(title: string, date: string, time: string): Promise<void> {
+    this.preferences.countdown.title = title
+    this.preferences.countdown.date = date
+    this.preferences.countdown.time = time
+
+    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+
+    return Promise.resolve()
+  }
+
 }

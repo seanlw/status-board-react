@@ -5,7 +5,8 @@ import { PreferencesTab } from '../../lib/preferences'
 import { Dialog, DialogFooter } from '../dialog'
 import { TabBar } from '../tab-bar'
 import { Button, ButtonGroup } from '../button'
-import { DarkSkyPreferences } from './dark-sky';
+import { DarkSkyPreferences } from './dark-sky'
+import { CountdownPreferences } from './countdown'
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -19,6 +20,10 @@ interface IPreferencesState {
   readonly darkSkyApiKey: string
   readonly darkSkyLatitude: number
   readonly darkSkyLongitude: number
+
+  readonly countdownTitle: string
+  readonly countdownDate: string
+  readonly countdownTime: string
 }
 
 export class Preferences extends React.Component<
@@ -32,7 +37,10 @@ export class Preferences extends React.Component<
       selectedIndex: PreferencesTab.DarkSky,
       darkSkyApiKey: this.props.preferences.darksky.apiKey,
       darkSkyLatitude: this.props.preferences.darksky.latitude,
-      darkSkyLongitude: this.props.preferences.darksky.longitude
+      darkSkyLongitude: this.props.preferences.darksky.longitude,
+      countdownTitle: this.props.preferences.countdown.title,
+      countdownDate: this.props.preferences.countdown.date,
+      countdownTime: this.props.preferences.countdown.time
     }
   }
 
@@ -41,6 +49,12 @@ export class Preferences extends React.Component<
       this.state.darkSkyApiKey,
       this.state.darkSkyLatitude,
       this.state.darkSkyLongitude
+    )
+
+    this.props.dispatcher.setPreferencesCountdown(
+      this.state.countdownTitle,
+      this.state.countdownDate,
+      this.state.countdownTime
     )
 
     this.props.onDismissed()
@@ -106,7 +120,14 @@ export class Preferences extends React.Component<
         )
       case PreferencesTab.Countdown:
         return (
-          <div>Countdown</div>
+          <CountdownPreferences
+            title={this.state.countdownTitle}
+            date={this.state.countdownDate}
+            time={this.state.countdownTime}
+            onTitleChanged={this.onCountdownTitleChanged}
+            onDateChanged={this.onCountdownDateChanged}
+            onTimeChanged={this.onCountdownTimeChanged}
+          />
         )
       case PreferencesTab.Pingdom:
         return (
@@ -133,5 +154,17 @@ export class Preferences extends React.Component<
 
   private onDarkSkyLongitudeChanged = (longitude: string) => {
     this.setState({ darkSkyLongitude: Number(longitude) })
+  }
+
+  private onCountdownTitleChanged = (title: string) => {
+    this.setState({ countdownTitle: title })
+  }
+
+  private onCountdownDateChanged = (date: string) => {
+    this.setState({ countdownDate: date })
+  }
+
+  private onCountdownTimeChanged = (time: string) => {
+    this.setState({ countdownTime: time })
   }
 }
