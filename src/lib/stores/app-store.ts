@@ -10,7 +10,7 @@ import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
 
-const electronStore = new ElectronStore()
+const electronStore = new ElectronStore({ name: 'status-board' })
 
 const defaultPreferences: IPreferences = {
   countdown: {
