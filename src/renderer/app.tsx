@@ -67,7 +67,11 @@ export class App extends React.Component<IAppProps, IAppState> {
           <ClockWidget
             datetime={state.datetime}
           />
-          <WeatherWidget />
+          <WeatherWidget
+            forcast={state.forcast}
+            city={state.preferences.darksky.city}
+            state={state.preferences.darksky.state}
+          />
           <CalendarWidget
             datetime={state.datetime}
           />

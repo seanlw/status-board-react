@@ -41,4 +41,6 @@ export interface IDarkSky {
   apiKey: string
   latitude: number | null
   longitude: number | null
+  city: string
+  state: string
 }

@@ -22,6 +22,8 @@ interface IPreferencesState {
   readonly darkSkyApiKey: string
   readonly darkSkyLatitude: number
   readonly darkSkyLongitude: number
+  readonly darkSkyCity: string
+  readonly darkSkyState: string
 
   readonly countdownTitle: string
   readonly countdownDate: string
@@ -43,6 +45,8 @@ export class Preferences extends React.Component<
       darkSkyApiKey: this.props.preferences.darksky.apiKey,
       darkSkyLatitude: this.props.preferences.darksky.latitude,
       darkSkyLongitude: this.props.preferences.darksky.longitude,
+      darkSkyCity: this.props.preferences.darksky.city,
+      darkSkyState: this.props.preferences.darksky.state,
       countdownTitle: this.props.preferences.countdown.title,
       countdownDate: this.props.preferences.countdown.date,
       countdownTime: this.props.preferences.countdown.time,
@@ -55,7 +59,9 @@ export class Preferences extends React.Component<
     this.props.dispatcher.setPreferencesDarkSky(
       this.state.darkSkyApiKey,
       this.state.darkSkyLatitude,
-      this.state.darkSkyLongitude
+      this.state.darkSkyLongitude,
+      this.state.darkSkyCity,
+      this.state.darkSkyState
     )
 
     this.props.dispatcher.setPreferencesCountdown(
@@ -120,9 +126,13 @@ export class Preferences extends React.Component<
             apiKey={this.state.darkSkyApiKey}
             latitude={String(this.state.darkSkyLatitude || '')}
             longitude={String(this.state.darkSkyLongitude || '')}
+            city={this.state.darkSkyCity}
+            state={this.state.darkSkyState}
             onApiKeyChanged={this.onDarkSkyApiKeyChanged}
             onLatitudeChanged={this.onDarkSkyLatitudeChanged}
             onLongitudeChanged={this.onDarkSkyLongitudeChanged}
+            onCityChanged={this.onDarkSkyCityChanged}
+            onStateChanged={this.onDarkSkyStateChanged}
           />
         )
       case PreferencesTab.RSS:
@@ -175,6 +185,14 @@ export class Preferences extends React.Component<
 
   private onDarkSkyLongitudeChanged = (longitude: string) => {
     this.setState({ darkSkyLongitude: Number(longitude) })
+  }
+
+  private onDarkSkyCityChanged = (city: string) => {
+    this.setState({ darkSkyCity: city })
+  }
+
+  private onDarkSkyStateChanged = (state: string) => {
+    this.setState({ darkSkyState: state })
   }
 
   private onCountdownTitleChanged = (title: string) => {

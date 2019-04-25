@@ -20,8 +20,14 @@ export class Dispatcher {
     return this.appStore._closePopup()
   }
 
-  public setPreferencesDarkSky(apiKey: string, latitude: number, longitude: number): Promise<void> {
-    return this.appStore._setPreferencesDarkSky(apiKey, latitude, longitude)
+  public setPreferencesDarkSky(
+    apiKey: string,
+    latitude: number,
+    longitude: number,
+    city: string,
+    state: string
+  ): Promise<void> {
+    return this.appStore._setPreferencesDarkSky(apiKey, latitude, longitude, city, state)
   }
 
   public setPreferencesCountdown(title: string, date: string, time: string): Promise<void> {
