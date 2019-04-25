@@ -7,7 +7,10 @@ import { TypedBaseStore } from './base-store'
 import { DarkSkyStore } from '../stores'
 import { IPreferences } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
-import { IDarkSkyState } from './dark-sky-store';
+import { IDarkSkyState } from './dark-sky-store'
+import * as ElectronStore from 'electron-store'
+
+const electronStore = new ElectronStore()
 
 const defaultPreferences: IPreferences = {
   countdown: {
@@ -85,7 +88,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public async loadInitialState() {
     this.preferences = JSON.parse(
-      String(localStorage.getItem('preferences'))
+      String(electronStore.get('preferences') || null)
     ) as IPreferences
 
     this.datetimeUpdater()
@@ -152,7 +155,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     })
     this.darkSkyStore.updateForcast()
 
-    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+    electronStore.set('preferences', JSON.stringify(this.preferences))
 
     this.emitUpdate()
     return Promise.resolve()
@@ -163,7 +166,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.preferences.countdown.date = date
     this.preferences.countdown.time = time
 
-    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+    electronStore.set('preferences', JSON.stringify(this.preferences))
 
     this.emitUpdate()
     return Promise.resolve()
@@ -172,7 +175,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
   public _setPreferencesUpcoming(url: string): Promise<void> {
     this.preferences.upcomingUrl = url
 
-    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+    electronStore.set('preferences', JSON.stringify(this.preferences))
 
     this.emitUpdate()
     return Promise.resolve()
@@ -181,7 +184,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
   public _setPreferencesBoardGameGeek(username: string): Promise<void> {
     this.preferences.boardGameGeekUsername = username
 
-    localStorage.setItem('preferences', JSON.stringify(this.preferences))
+    electronStore.set('preferences', JSON.stringify(this.preferences))
 
     this.emitUpdate()
     return Promise.resolve()
