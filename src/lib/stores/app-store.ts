@@ -4,11 +4,15 @@ import {
   PopupType
 } from '../app-state'
 import { TypedBaseStore } from './base-store'
-import { DarkSkyStore } from '../stores'
+import {
+  DarkSkyStore,
+  UpcomingStore
+} from '../stores'
 import { IPreferences } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
+import { IUpcomingState, IUpcomingEvent } from './upcoming-store';
 
 const electronStore = new ElectronStore({ name: 'status-board' })
 
@@ -44,13 +48,19 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private currentPopup: Popup | null = null
   private preferences: IPreferences = defaultPreferences
   private forcast: IDarkSkyForcast | null | undefined = null
+  private events: ReadonlyArray<IUpcomingEvent> = []
 
   private readonly darkSkyStore: DarkSkyStore
+  private readonly upcomingStore: UpcomingStore
 
-  public constructor(darkSkyStore: DarkSkyStore) {
+  public constructor(
+    darkSkyStore: DarkSkyStore,
+    upcomingStore: UpcomingStore
+  ) {
     super()
 
     this.darkSkyStore = darkSkyStore
+    this.upcomingStore = upcomingStore
 
     this.wireupStoreEventHandlers()
   }
@@ -75,6 +85,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.darkSkyStore.onDidUpdate(data =>
       this.onDarkSkyStoreUpdated(data)
     )
+
+    this.upcomingStore.onDidError(error => this.emitError(error))
+    this.upcomingStore.onDidUpdate(data =>
+      this.onUpcomingStoreUpdate(data)
+    )
   }
 
   public getState(): IAppState {
@@ -82,7 +97,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       preferences: this.preferences,
       datetime: this.datetime,
       currentPopup: this.currentPopup,
-      forcast: this.forcast
+      forcast: this.forcast,
+      events: this.events
     }
   }
 
@@ -105,6 +121,13 @@ export class AppStore extends TypedBaseStore<IAppState> {
       })
       this.darkSkyStore.updateForcast()
       this.darkSkyStore.startForcastUpdater()
+
+      this.upcomingStore.setState({
+        url: this.preferences.upcomingUrl
+      })
+      this.upcomingStore.updateEvents()
+      this.upcomingStore.startUpcomingUpdater()
+
     }
 
     this.emitUpdateNow()
@@ -175,6 +198,9 @@ export class AppStore extends TypedBaseStore<IAppState> {
   public _setPreferencesUpcoming(url: string): Promise<void> {
     this.preferences.upcomingUrl = url
 
+    this.upcomingStore.setState({ url: url })
+    this.upcomingStore.updateEvents()
+
     electronStore.set('preferences', JSON.stringify(this.preferences))
 
     this.emitUpdate()
@@ -196,6 +222,15 @@ export class AppStore extends TypedBaseStore<IAppState> {
     }
 
     this.forcast = data.forcast
+    this.emitUpdate()
+  }
+
+  private onUpcomingStoreUpdate(data: IUpcomingState | null) {
+    if (!data) {
+      return
+    }
+
+    this.events = data.events || []
     this.emitUpdate()
   }
 

@@ -1,5 +1,5 @@
 import { IPreferences } from "./preferences"
-import { IDarkSkyForcast } from "./stores"
+import { IDarkSkyForcast, IUpcomingEvent } from "./stores"
 
 export type Popup =
   | { type: PopupType.Preferences }
@@ -9,6 +9,7 @@ export interface IAppState {
   readonly currentPopup: Popup | null
   readonly preferences: IPreferences
   readonly forcast: IDarkSkyForcast | null | undefined
+  readonly events: ReadonlyArray<IUpcomingEvent>
 }
 
 export enum PanelSizeType {

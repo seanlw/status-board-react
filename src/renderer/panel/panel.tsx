@@ -10,13 +10,18 @@ interface IPanelProps {
   readonly title?: string
   readonly titleAlignment?: TitleAlign
   readonly noBodyPadding?: boolean
+  readonly className?: string
 }
 
 export class Panel extends React.Component<IPanelProps, {}> {
 
   public render() {
     const className = classNames('panel', `panel-size-${this.props.size}x1`)
-    const classNameBody = classNames('panel-body', this.props.noBodyPadding ? 'no-padding' : 'padding')
+    const classNameBody = classNames(
+      this.props.className,
+      'panel-body',
+      this.props.noBodyPadding ? 'no-padding' : 'padding',
+    )
 
     return (
       <div className={className}>

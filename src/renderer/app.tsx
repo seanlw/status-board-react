@@ -87,7 +87,9 @@ export class App extends React.Component<IAppProps, IAppState> {
         </Row>
         <Row>
           <PingdomWidget />
-          <UpcomingWidget />
+          <UpcomingWidget
+            events={state.events}
+          />
         </Row>
         <Row>
           <BoardGameGeekPlaysWidget />

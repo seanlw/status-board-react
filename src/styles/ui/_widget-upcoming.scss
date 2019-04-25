@@ -1,0 +1,54 @@
+.upcoming-panel-body {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.upcoming-container {
+  text-transform: uppercase;
+}
+
+.upcoming-row {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 42px;
+  margin-bottom: 13px;
+
+  h3 {
+    font-weight: normal;
+    font-size: 13px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    margin: 0;
+    margin-top: 4px;
+  }
+
+  .upcoming-days {
+    width: 60px;
+    height: 42px;
+    text-align: center;
+    border-right: 1px solid rgb(85, 85, 85);
+  }
+
+  .upcoming-day {
+    font-size: 28px;
+    line-height: 28px;
+  }
+
+  .upcoming-day-label {
+    font-size: 13px;
+    line-height: 13px;
+  }
+
+  .upcoming-title {
+    font-size: 23px;
+    line-height: 40px;
+    height: 40px;
+    width: 158px;
+    margin-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
