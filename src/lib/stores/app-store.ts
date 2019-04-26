@@ -9,7 +9,7 @@ import {
   UpcomingStore,
   BoardGameGeekStore
 } from '../stores'
-import { IPreferences } from '../preferences'
+import { IPreferences, IRssFeed } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
@@ -24,7 +24,7 @@ const defaultPreferences: IPreferences = {
     date: '',
     time: ''
   },
-  rss: [],
+  rss: [{ url: '' }],
   upcomingUrl: '',
   pingdom: {
     apiKey: '',
@@ -227,6 +227,15 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public _setPreferencesBoardGameGeek(username: string): Promise<void> {
     this.preferences.boardGameGeekUsername = username
+
+    electronStore.set('preferences', JSON.stringify(this.preferences))
+
+    this.emitUpdate()
+    return Promise.resolve()
+  }
+
+  public _setPreferencesRssFeeds(feeds: ReadonlyArray<IRssFeed>): Promise<void> {
+    this.preferences.rss = feeds
 
     electronStore.set('preferences', JSON.stringify(this.preferences))
 

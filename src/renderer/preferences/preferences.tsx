@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Dispatcher } from '../../lib/dispatcher'
-import { PreferencesTab } from '../../lib/preferences'
+import { PreferencesTab, IRssFeed } from '../../lib/preferences'
 import { Dialog, DialogFooter } from '../dialog'
 import { TabBar } from '../tab-bar'
 import { Button, ButtonGroup } from '../button'
@@ -9,6 +9,7 @@ import { DarkSkyPreferences } from './dark-sky'
 import { CountdownPreferences } from './countdown'
 import { UpcomingPreferences } from './upcoming';
 import { BoardGameGeekPreferences } from './boardgamegeek';
+import { RssFeedsPreferences } from './rss-feeds';
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -31,6 +32,8 @@ interface IPreferencesState {
 
   readonly upcomingUrl: string
   readonly boardGameGeekUsername: string
+
+  readonly rssFeeds: ReadonlyArray<IRssFeed>
 }
 
 export class Preferences extends React.Component<
@@ -51,7 +54,8 @@ export class Preferences extends React.Component<
       countdownDate: this.props.preferences.countdown.date,
       countdownTime: this.props.preferences.countdown.time,
       upcomingUrl: this.props.preferences.upcomingUrl,
-      boardGameGeekUsername: this.props.preferences.boardGameGeekUsername
+      boardGameGeekUsername: this.props.preferences.boardGameGeekUsername,
+      rssFeeds: this.props.preferences.rss
     }
   }
 
@@ -76,6 +80,10 @@ export class Preferences extends React.Component<
 
     this.props.dispatcher.setPreferencesBoardGameGeek(
       this.state.boardGameGeekUsername
+    )
+
+    this.props.dispatcher.setPreferencesRssFeeds(
+      this.state.rssFeeds
     )
 
     this.props.onDismissed()
@@ -137,7 +145,12 @@ export class Preferences extends React.Component<
         )
       case PreferencesTab.RSS:
         return (
-          <div>RSS</div>
+          <RssFeedsPreferences
+            rssFeeds={this.state.rssFeeds}
+            onRssFeedsChanged={this.onRssFeedsChanged}
+            onRssFieldInsert={this.onRssFieldInsert}
+            onRssFieldRemove={this.onRssFieldRemove}
+          />
         )
       case PreferencesTab.Upcoming:
         return (
@@ -214,4 +227,30 @@ export class Preferences extends React.Component<
   private onBoardGameGeekUsernameChanged = (name: string) => {
     this.setState({ boardGameGeekUsername: name })
   }
+
+  private onRssFeedsChanged = (index: number, value: string) => {
+    let newRssFeeds = Array.from(this.state.rssFeeds)
+    const newFeed: IRssFeed = { ...newRssFeeds[index] }
+
+    newFeed.url = value
+    newRssFeeds[index] = newFeed
+
+    this.setState({ rssFeeds: newRssFeeds })
+  }
+
+  private onRssFieldInsert = (index: number) => {
+    let newRssFeeds = Array.from(this.state.rssFeeds)
+    newRssFeeds.splice(index + 1, 0, {
+      url: ''
+    })
+    this.setState({ rssFeeds: newRssFeeds })
+  }
+
+  private onRssFieldRemove = (index: number) => {
+    let newRssFeeds = Array.from(this.state.rssFeeds)
+    newRssFeeds.splice(index, 1)
+    this.setState({ rssFeeds: newRssFeeds })
+  }
+
+
 }

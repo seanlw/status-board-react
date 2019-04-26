@@ -1,5 +1,6 @@
 import { AppStore } from '../stores'
 import { Popup } from '../app-state'
+import { IRssFeed } from '../preferences';
 
 export class Dispatcher {
   private readonly appStore: AppStore
@@ -40,5 +41,9 @@ export class Dispatcher {
 
   public setPreferencesBoardGameGeek(username: string): Promise<void> {
     return this.appStore._setPreferencesBoardGameGeek(username)
+  }
+
+  public setPreferencesRssFeeds(feed: ReadonlyArray<IRssFeed>): Promise<void> {
+    return this.appStore._setPreferencesRssFeeds(feed)
   }
 }
