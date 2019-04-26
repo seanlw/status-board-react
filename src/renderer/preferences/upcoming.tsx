@@ -7,7 +7,7 @@ import { TextBox } from '../form'
 interface IUpcomingPreferencesProps {
   readonly url: string
 
-  readonly onUrlChanged: (title: string) => void
+  readonly onUrlChanged: (url: string) => void
 }
 
 export class UpcomingPreferences extends React.Component<IUpcomingPreferencesProps, {}> {

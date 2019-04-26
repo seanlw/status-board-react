@@ -1,6 +1,6 @@
 import { AppStore } from '../stores'
 import { Popup } from '../app-state'
-import { IRssFeed } from '../preferences';
+import { IRssFeed, IServer } from '../preferences';
 
 export class Dispatcher {
   private readonly appStore: AppStore
@@ -45,5 +45,18 @@ export class Dispatcher {
 
   public setPreferencesRssFeeds(feed: ReadonlyArray<IRssFeed>): Promise<void> {
     return this.appStore._setPreferencesRssFeeds(feed)
+  }
+
+  public setPreferencesPingdom(
+    api: string,
+    username: string,
+    password: string,
+    servers: ReadonlyArray<IServer>
+  ): Promise<any> {
+    return this.appStore._setPreferencesPingdom(api, username, password, servers)
+  }
+
+  public async loadPingdomHosts(): Promise<void> {
+    return this.appStore._loadPingdomHosts()
   }
 }

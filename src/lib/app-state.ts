@@ -3,7 +3,8 @@ import {
   IDarkSkyForcast,
   IUpcomingEvent,
   IBoardGameGeekPlay,
-  IRssItem
+  IRssItem,
+  IPingdomHost
 } from "./stores"
 
 export type Popup =
@@ -17,6 +18,7 @@ export interface IAppState {
   readonly events: ReadonlyArray<IUpcomingEvent>
   readonly plays: ReadonlyArray<IBoardGameGeekPlay>
   readonly rssItems: ReadonlyArray<IRssItem>
+  readonly availablePingdomHosts: ReadonlyArray<IPingdomHost>
 }
 
 export enum PanelSizeType {

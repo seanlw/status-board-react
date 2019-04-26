@@ -29,7 +29,6 @@ export interface IRssFeed {
 export interface IPingdom {
   apiKey: string
   username: string
-  password: string
   servers: ReadonlyArray<IServer>
 }
 

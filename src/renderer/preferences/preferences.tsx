@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Dispatcher } from '../../lib/dispatcher'
-import { PreferencesTab, IRssFeed } from '../../lib/preferences'
+import { PreferencesTab, IRssFeed, IServer, IPreferences } from '../../lib/preferences'
 import { Dialog, DialogFooter } from '../dialog'
 import { TabBar } from '../tab-bar'
 import { Button, ButtonGroup } from '../button'
@@ -10,10 +10,14 @@ import { CountdownPreferences } from './countdown'
 import { UpcomingPreferences } from './upcoming';
 import { BoardGameGeekPreferences } from './boardgamegeek';
 import { RssFeedsPreferences } from './rss-feeds';
+import { TokenStore } from '../../lib/stores/token-store';
+import { PingdomPreferences } from './pingdom';
+import { IPingdomHost } from '../../lib/stores';
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
-  readonly preferences: any
+  readonly preferences: IPreferences
+  readonly availablePingdomHosts: ReadonlyArray<IPingdomHost>
   readonly onDismissed: () => void
 }
 
@@ -34,6 +38,11 @@ interface IPreferencesState {
   readonly boardGameGeekUsername: string
 
   readonly rssFeeds: ReadonlyArray<IRssFeed>
+
+  readonly pingdomApiKey: string
+  readonly pingdomUsername: string
+  readonly pingdomPassword: string
+  readonly pingdomServers: ReadonlyArray<IServer>
 }
 
 export class Preferences extends React.Component<
@@ -46,8 +55,8 @@ export class Preferences extends React.Component<
     this.state = {
       selectedIndex: PreferencesTab.DarkSky,
       darkSkyApiKey: this.props.preferences.darksky.apiKey,
-      darkSkyLatitude: this.props.preferences.darksky.latitude,
-      darkSkyLongitude: this.props.preferences.darksky.longitude,
+      darkSkyLatitude: Number(this.props.preferences.darksky.latitude),
+      darkSkyLongitude: Number(this.props.preferences.darksky.longitude),
       darkSkyCity: this.props.preferences.darksky.city,
       darkSkyState: this.props.preferences.darksky.state,
       countdownTitle: this.props.preferences.countdown.title,
@@ -55,8 +64,14 @@ export class Preferences extends React.Component<
       countdownTime: this.props.preferences.countdown.time,
       upcomingUrl: this.props.preferences.upcomingUrl,
       boardGameGeekUsername: this.props.preferences.boardGameGeekUsername,
-      rssFeeds: this.props.preferences.rss
+      rssFeeds: this.props.preferences.rss,
+      pingdomApiKey: this.props.preferences.pingdom.apiKey,
+      pingdomUsername: this.props.preferences.pingdom.username,
+      pingdomPassword: '',
+      pingdomServers: this.props.preferences.pingdom.servers
     }
+
+    this.getPingdomePassword(this.props.preferences.pingdom.username)
   }
 
   private onSave = async () => {
@@ -86,7 +101,18 @@ export class Preferences extends React.Component<
       this.state.rssFeeds
     )
 
+    this.props.dispatcher.setPreferencesPingdom(
+      this.state.pingdomApiKey,
+      this.state.pingdomUsername,
+      this.state.pingdomPassword,
+      this.state.pingdomServers
+    )
+
     this.props.onDismissed()
+  }
+
+  private onPingdomBlur = async () => {
+    this.props.dispatcher.loadPingdomHosts()
   }
 
   public render() {
@@ -172,7 +198,18 @@ export class Preferences extends React.Component<
         )
       case PreferencesTab.Pingdom:
         return (
-          <div>Pingdom</div>
+          <PingdomPreferences
+            apiKey={this.state.pingdomApiKey}
+            username={this.state.pingdomUsername}
+            password={this.state.pingdomPassword}
+            servers={this.state.pingdomServers}
+            availableHosts={this.props.availablePingdomHosts}
+            onApiKeyChanged={this.onPingdomApiKeyChanged}
+            onUsernameChanged={this.onPingdomUsernameChange}
+            onPasswordChanged={this.onPingdomPasswordChanged}
+            onServersChanged={this.onPingdomServersChanged}
+            onBlur={this.onPingdomBlur}
+          />
         )
       case PreferencesTab.BoardGameGeek:
         return (
@@ -252,5 +289,28 @@ export class Preferences extends React.Component<
     this.setState({ rssFeeds: newRssFeeds })
   }
 
+  private onPingdomApiKeyChanged = (key: string) => {
+    this.setState({ pingdomApiKey: key })
+  }
+
+  private onPingdomUsernameChange = (username: string) => {
+    this.setState({ pingdomUsername: username })
+  }
+
+  private onPingdomPasswordChanged = (password: string) => {
+    this.setState({ pingdomPassword: password })
+  }
+
+  private onPingdomServersChanged = (servers: ReadonlyArray<IServer>) => {
+    this.setState({ pingdomServers: servers })
+  }
+
+  private async getPingdomePassword(username: string): Promise<any> {
+    try {
+      const password = await TokenStore.getItem('pingdom', username)
+      this.setState({ pingdomPassword: String(password) })
+    }
+    catch (e) { }
+  }
 
 }

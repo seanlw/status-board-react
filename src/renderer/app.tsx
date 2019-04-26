@@ -128,6 +128,7 @@ export class App extends React.Component<IAppProps, IAppState> {
           <Preferences
             dispatcher={this.props.dispatcher}
             preferences={this.state.preferences}
+            availablePingdomHosts={this.state.availablePingdomHosts}
             onDismissed={this.onPopupDismissed}
           />
         )

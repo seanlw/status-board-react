@@ -9,17 +9,20 @@ import {
   UpcomingStore,
   BoardGameGeekStore,
   RssStore,
+  PingdomStore,
   IUpcomingState,
   IUpcomingEvent,
   IBoardGameGeekStoreState,
   IBoardGameGeekPlay,
   IRssItem,
-  IRssStoreState
+  IRssStoreState,
+  IPingdomStoreState
 } from '../stores'
-import { IPreferences, IRssFeed } from '../preferences'
+import { IPreferences, IRssFeed, IServer } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
+import { IPingdomHost } from './pingdom-store';
 
 const electronStore = new ElectronStore({ name: 'status-board' })
 
@@ -34,7 +37,6 @@ const defaultPreferences: IPreferences = {
   pingdom: {
     apiKey: '',
     username: '',
-    password: '',
     servers: []
   },
   darksky: {
@@ -58,17 +60,20 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private events: ReadonlyArray<IUpcomingEvent> = []
   private plays: ReadonlyArray<IBoardGameGeekPlay> = []
   private rssItems: ReadonlyArray<IRssItem> = []
+  private availablePingdomHosts: ReadonlyArray<IPingdomHost> = []
 
   private readonly darkSkyStore: DarkSkyStore
   private readonly upcomingStore: UpcomingStore
   private readonly boardGameGeekStore: BoardGameGeekStore
   private readonly rssStore: RssStore
+  private readonly pingdomStore: PingdomStore
 
   public constructor(
     darkSkyStore: DarkSkyStore,
     upcomingStore: UpcomingStore,
     boardGameGeekStore: BoardGameGeekStore,
-    rssStore: RssStore
+    rssStore: RssStore,
+    pingdomStore: PingdomStore
   ) {
     super()
 
@@ -76,6 +81,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.upcomingStore = upcomingStore
     this.boardGameGeekStore = boardGameGeekStore
     this.rssStore = rssStore
+    this.pingdomStore = pingdomStore
 
     this.wireupStoreEventHandlers()
   }
@@ -115,6 +121,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.rssStore.onDidUpdate(data =>
       this.onRssStoreUpdate(data)
     )
+
+    this.pingdomStore.onDidError(error => this.emitError(error))
+    this.pingdomStore.onDidUpdate(data =>
+      this.onPingdomStoreUpdate(data)
+    )
   }
 
   public getState(): IAppState {
@@ -125,7 +136,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       forcast: this.forcast,
       events: this.events,
       plays: this.plays,
-      rssItems: this.rssItems
+      rssItems: this.rssItems,
+      availablePingdomHosts: this.availablePingdomHosts
     }
   }
 
@@ -166,6 +178,13 @@ export class AppStore extends TypedBaseStore<IAppState> {
       })
       this.rssStore.updateRssFeeds()
       this.rssStore.startRssFeedsUpdater()
+
+      this.pingdomStore.setState({
+        apiKey: this.preferences.pingdom.apiKey,
+        username: this.preferences.pingdom.username
+      })
+      this.pingdomStore.updateChecks()
+
     }
 
     this.emitUpdateNow()
@@ -263,6 +282,31 @@ export class AppStore extends TypedBaseStore<IAppState> {
     return Promise.resolve()
   }
 
+  public _setPreferencesPingdom(
+    key: string,
+    username: string,
+    password: string,
+    servers: ReadonlyArray<IServer>
+  ): Promise<any> {
+
+    this.preferences.pingdom.apiKey = key
+    this.preferences.pingdom.username = username
+    this.preferences.pingdom.servers = servers
+
+    electronStore.set('preferences', JSON.stringify(this.preferences))
+
+    const currentState = this.pingdomStore.getState()
+    this.pingdomStore.setState({
+      ...currentState,
+      apiKey: key,
+      username: username,
+      password: password
+    })
+
+    this.emitUpdate()
+    return Promise.resolve()
+  }
+
   private onDarkSkyStoreUpdated(data: IDarkSkyState | null) {
     if (!data) {
       return
@@ -296,6 +340,24 @@ export class AppStore extends TypedBaseStore<IAppState> {
     }
 
     this.rssItems = data.rssItems || []
+    this.emitUpdate()
+  }
+
+  private onPingdomStoreUpdate(data: IPingdomStoreState | null) {
+    if (!data) {
+      return
+    }
+    if (data.checks) {
+      this.availablePingdomHosts = data.checks.checks || []
+    }
+
+    this.emitUpdate()
+  }
+
+  public async _loadPingdomHosts(): Promise<any> {
+    const hosts = await this.pingdomStore.getHosts()
+    this.availablePingdomHosts = hosts
+
     this.emitUpdate()
   }
 

@@ -9,7 +9,8 @@ import {
   DarkSkyStore,
   UpcomingStore,
   BoardGameGeekStore,
-  RssStore
+  RssStore,
+  PingdomStore
 } from '../lib/stores'
 
 import '../styles/desktop.scss'
@@ -18,12 +19,14 @@ const darkSkyStore = new DarkSkyStore()
 const upcomingStore = new UpcomingStore()
 const boardGameGeekStore = new BoardGameGeekStore()
 const rssStore = new RssStore()
+const pingdomStore = new PingdomStore()
 
 const appStore = new AppStore(
   darkSkyStore,
   upcomingStore,
   boardGameGeekStore,
-  rssStore
+  rssStore,
+  pingdomStore
 )
 const dispatcher = new Dispatcher(appStore)
 
