@@ -7,14 +7,19 @@ import { TypedBaseStore } from './base-store'
 import {
   DarkSkyStore,
   UpcomingStore,
-  BoardGameGeekStore
+  BoardGameGeekStore,
+  RssStore,
+  IUpcomingState,
+  IUpcomingEvent,
+  IBoardGameGeekStoreState,
+  IBoardGameGeekPlay,
+  IRssItem,
+  IRssStoreState
 } from '../stores'
 import { IPreferences, IRssFeed } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
-import { IUpcomingState, IUpcomingEvent } from './upcoming-store';
-import { IBoardGameGeekStoreState, IBoardGameGeekPlay } from './board-game-geek-store';
 
 const electronStore = new ElectronStore({ name: 'status-board' })
 
@@ -52,21 +57,25 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private forcast: IDarkSkyForcast | null | undefined = null
   private events: ReadonlyArray<IUpcomingEvent> = []
   private plays: ReadonlyArray<IBoardGameGeekPlay> = []
+  private rssItems: ReadonlyArray<IRssItem> = []
 
   private readonly darkSkyStore: DarkSkyStore
   private readonly upcomingStore: UpcomingStore
   private readonly boardGameGeekStore: BoardGameGeekStore
+  private readonly rssStore: RssStore
 
   public constructor(
     darkSkyStore: DarkSkyStore,
     upcomingStore: UpcomingStore,
-    boardGameGeekStore: BoardGameGeekStore
+    boardGameGeekStore: BoardGameGeekStore,
+    rssStore: RssStore
   ) {
     super()
 
     this.darkSkyStore = darkSkyStore
     this.upcomingStore = upcomingStore
     this.boardGameGeekStore = boardGameGeekStore
+    this.rssStore = rssStore
 
     this.wireupStoreEventHandlers()
   }
@@ -101,6 +110,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.boardGameGeekStore.onDidUpdate(data =>
       this.onBoardGameGeekStoreUpdate(data)
     )
+
+    this.rssStore.onDidError(error => this.emitError(error))
+    this.rssStore.onDidUpdate(data =>
+      this.onRssStoreUpdate(data)
+    )
   }
 
   public getState(): IAppState {
@@ -110,7 +124,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       currentPopup: this.currentPopup,
       forcast: this.forcast,
       events: this.events,
-      plays: this.plays
+      plays: this.plays,
+      rssItems: this.rssItems
     }
   }
 
@@ -146,6 +161,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
       this.boardGameGeekStore.updatePlays()
       this.boardGameGeekStore.startBoardGameGeekUpdater()
 
+      this.rssStore.setState({
+        rssFeeds: this.preferences.rss
+      })
+      this.rssStore.updateRssFeeds()
+      this.rssStore.startRssFeedsUpdater()
     }
 
     this.emitUpdateNow()
@@ -267,6 +287,15 @@ export class AppStore extends TypedBaseStore<IAppState> {
     }
 
     this.plays = data.plays || []
+    this.emitUpdate()
+  }
+
+  private onRssStoreUpdate(data: IRssStoreState | null) {
+    if (!data) {
+      return
+    }
+
+    this.rssItems = data.rssItems || []
     this.emitUpdate()
   }
 

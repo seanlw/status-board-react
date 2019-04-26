@@ -8,7 +8,8 @@ import {
   AppStore,
   DarkSkyStore,
   UpcomingStore,
-  BoardGameGeekStore
+  BoardGameGeekStore,
+  RssStore
 } from '../lib/stores'
 
 import '../styles/desktop.scss'
@@ -16,8 +17,14 @@ import '../styles/desktop.scss'
 const darkSkyStore = new DarkSkyStore()
 const upcomingStore = new UpcomingStore()
 const boardGameGeekStore = new BoardGameGeekStore()
+const rssStore = new RssStore()
 
-const appStore = new AppStore(darkSkyStore, upcomingStore, boardGameGeekStore)
+const appStore = new AppStore(
+  darkSkyStore,
+  upcomingStore,
+  boardGameGeekStore,
+  rssStore
+)
 const dispatcher = new Dispatcher(appStore)
 
 ReactDOM.render(

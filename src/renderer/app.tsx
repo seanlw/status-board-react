@@ -77,7 +77,9 @@ export class App extends React.Component<IAppProps, IAppState> {
           />
         </Row>
         <Row>
-          <RSSWidget />
+          <RSSWidget
+            items={state.rssItems}
+          />
           <CountdownWidget
             datetime={state.datetime}
             title={state.preferences.countdown.title}

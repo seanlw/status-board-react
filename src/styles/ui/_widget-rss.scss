@@ -1,0 +1,25 @@
+.rss-panel {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.rss-item-row {
+  h2,
+  h3 {
+    font-weight: normal;
+    line-height: 20px;
+    margin: 0;
+  }
+
+  h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 14px;
+    color: #7f7f7f;
+  }
+}
