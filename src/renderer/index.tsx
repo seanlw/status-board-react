@@ -7,15 +7,17 @@ import { Dispatcher } from '../lib/dispatcher'
 import {
   AppStore,
   DarkSkyStore,
-  UpcomingStore
+  UpcomingStore,
+  BoardGameGeekStore
 } from '../lib/stores'
 
 import '../styles/desktop.scss'
 
 const darkSkyStore = new DarkSkyStore()
 const upcomingStore = new UpcomingStore()
+const boardGameGeekStore = new BoardGameGeekStore()
 
-const appStore = new AppStore(darkSkyStore, upcomingStore)
+const appStore = new AppStore(darkSkyStore, upcomingStore, boardGameGeekStore)
 const dispatcher = new Dispatcher(appStore)
 
 ReactDOM.render(

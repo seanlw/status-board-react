@@ -1,0 +1,28 @@
+#boardgames-chart {
+  fill: transparent;
+
+  path, line {
+    stroke: #c0c0c0;
+  }
+
+  .c3-line {
+    stroke-width: 3px;
+    stroke: #3fb4f9;
+  }
+
+  .c3-axis-y {
+    path.domain {
+      stroke: none;
+    }
+  }
+
+  .c3-area {
+    fill: #3fb4f9;
+    opacity: 0.2;
+  }
+
+  .tick text{
+    fill: #7f7f7f;
+    font-size: 13px;
+  }
+}

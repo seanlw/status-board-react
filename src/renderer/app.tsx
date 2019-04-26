@@ -92,7 +92,9 @@ export class App extends React.Component<IAppProps, IAppState> {
           />
         </Row>
         <Row>
-          <BoardGameGeekPlaysWidget />
+          <BoardGameGeekPlaysWidget
+            plays={state.plays}
+          />
         </Row>
       </div>
     )

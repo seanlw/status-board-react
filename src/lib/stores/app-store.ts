@@ -6,13 +6,15 @@ import {
 import { TypedBaseStore } from './base-store'
 import {
   DarkSkyStore,
-  UpcomingStore
+  UpcomingStore,
+  BoardGameGeekStore
 } from '../stores'
 import { IPreferences } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
 import { IUpcomingState, IUpcomingEvent } from './upcoming-store';
+import { IBoardGameGeekStoreState, IBoardGameGeekPlay } from './board-game-geek-store';
 
 const electronStore = new ElectronStore({ name: 'status-board' })
 
@@ -49,18 +51,22 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private preferences: IPreferences = defaultPreferences
   private forcast: IDarkSkyForcast | null | undefined = null
   private events: ReadonlyArray<IUpcomingEvent> = []
+  private plays: ReadonlyArray<IBoardGameGeekPlay> = []
 
   private readonly darkSkyStore: DarkSkyStore
   private readonly upcomingStore: UpcomingStore
+  private readonly boardGameGeekStore: BoardGameGeekStore
 
   public constructor(
     darkSkyStore: DarkSkyStore,
-    upcomingStore: UpcomingStore
+    upcomingStore: UpcomingStore,
+    boardGameGeekStore: BoardGameGeekStore
   ) {
     super()
 
     this.darkSkyStore = darkSkyStore
     this.upcomingStore = upcomingStore
+    this.boardGameGeekStore = boardGameGeekStore
 
     this.wireupStoreEventHandlers()
   }
@@ -90,6 +96,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.upcomingStore.onDidUpdate(data =>
       this.onUpcomingStoreUpdate(data)
     )
+
+    this.boardGameGeekStore.onDidError(error => this.emitError(error))
+    this.boardGameGeekStore.onDidUpdate(data =>
+      this.onBoardGameGeekStoreUpdate(data)
+    )
   }
 
   public getState(): IAppState {
@@ -98,7 +109,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       datetime: this.datetime,
       currentPopup: this.currentPopup,
       forcast: this.forcast,
-      events: this.events
+      events: this.events,
+      plays: this.plays
     }
   }
 
@@ -127,6 +139,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
       })
       this.upcomingStore.updateEvents()
       this.upcomingStore.startUpcomingUpdater()
+
+      this.boardGameGeekStore.setState({
+        username: this.preferences.boardGameGeekUsername
+      })
+      this.boardGameGeekStore.updatePlays()
+      this.boardGameGeekStore.startBoardGameGeekUpdater()
 
     }
 
@@ -231,6 +249,15 @@ export class AppStore extends TypedBaseStore<IAppState> {
     }
 
     this.events = data.events || []
+    this.emitUpdate()
+  }
+
+  private onBoardGameGeekStoreUpdate(data: IBoardGameGeekStoreState | null) {
+    if (!data) {
+      return
+    }
+
+    this.plays = data.plays || []
     this.emitUpdate()
   }
 
