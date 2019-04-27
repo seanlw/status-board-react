@@ -13,6 +13,7 @@ dialog {
   opacity: 1;
   min-width: 400px;
   max-width: 600px;
+  -webkit-app-region: no-drag;
 
   &::backdrop {
     background: var(--overlay-background-color);

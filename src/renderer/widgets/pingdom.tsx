@@ -21,6 +21,7 @@ export class PingdomWidget extends React.Component<IPingdomWidgetProps, {}> {
     return this.props.servers.map((server: IServer, index: number) => {
       return (
         <IPingdomServer
+          key={index}
           hostname={server.id}
           hosts={hosts}
         />
