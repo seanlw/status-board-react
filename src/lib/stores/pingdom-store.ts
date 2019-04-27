@@ -73,6 +73,9 @@ export class PingdomStore extends TypedBaseStore<IPingdomStoreState | null> {
 
     const currentState = this.state
     const password = await TokenStore.getItem('pingdom', currentState.username)
+    if (!password) {
+      return
+    }
 
     const options = {
       url: pingdomEndpoint,
@@ -103,5 +106,15 @@ export class PingdomStore extends TypedBaseStore<IPingdomStoreState | null> {
       return Promise.resolve(hosts)
     }
     return Promise.resolve(this.state.checks ? this.state.checks.checks : [])
+  }
+
+  public startPingdomUpdater() {
+    window.setTimeout(() => {
+      const currentState = this.state
+      if (currentState && currentState.username !== '' && currentState.apiKey !== '') {
+        this.updateChecks()
+        this.startPingdomUpdater()
+      }
+    }, 5 * 60 * 1000)
   }
 }

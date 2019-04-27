@@ -4,7 +4,8 @@ import {
   IUpcomingEvent,
   IBoardGameGeekPlay,
   IRssItem,
-  IPingdomHost
+  IPingdomHost,
+  IPingdomCheck
 } from "./stores"
 
 export type Popup =
@@ -19,6 +20,7 @@ export interface IAppState {
   readonly plays: ReadonlyArray<IBoardGameGeekPlay>
   readonly rssItems: ReadonlyArray<IRssItem>
   readonly availablePingdomHosts: ReadonlyArray<IPingdomHost>
+  readonly hosts: IPingdomCheck | null
 }
 
 export enum PanelSizeType {

@@ -88,7 +88,10 @@ export class App extends React.Component<IAppProps, IAppState> {
           />
         </Row>
         <Row>
-          <PingdomWidget />
+          <PingdomWidget
+            hosts={state.hosts}
+            servers={state.preferences.pingdom.servers}
+          />
           <UpcomingWidget
             events={state.events}
           />

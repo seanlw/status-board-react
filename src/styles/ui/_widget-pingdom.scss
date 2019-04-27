@@ -1,0 +1,61 @@
+.pingdom-server {
+  height: 37px;
+
+  .responsetime {
+    display: inline-block;
+    overflow: hidden;
+    width: 60px;
+    max-width: 60px;
+    margin-left: 5px;
+    line-height: 37px;
+
+    &.warning {
+      color: #e5c852;
+    }
+    &.critical{
+      color: #e3524f;
+    }
+  }
+
+  .status {
+    font-family: 'FontAwesome';
+    font-size: 37px;
+    line-height: 37px;
+    width: 38px;
+    text-align: center;
+    color: #e5c852;
+    display: inline-block;
+    overflow: hidden;
+
+    &:before {
+      content: "\f10c";
+    }
+
+    &.up:before {
+      color: #90c564;
+      content: "\f0d8";
+    }
+
+    &.down:before {
+      color: #e3524f;
+      content: "\f0d7";
+    }
+
+    &.down + h2 {
+      color: #e3524f;
+    }
+  }
+
+  h2 {
+    width: 370px;
+    max-width: 370px;
+    margin: 0;
+    margin-left: 15px;
+    display: inline-block;
+    font-size: 28px;
+    line-height: 37px;
+    font-weight: normal;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+}

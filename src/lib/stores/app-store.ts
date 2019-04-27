@@ -16,13 +16,14 @@ import {
   IBoardGameGeekPlay,
   IRssItem,
   IRssStoreState,
-  IPingdomStoreState
+  IPingdomStoreState,
+  IPingdomHost,
+  IPingdomCheck
 } from '../stores'
 import { IPreferences, IRssFeed, IServer } from '../preferences'
 import { IDarkSkyForcast } from '../stores'
 import { IDarkSkyState } from './dark-sky-store'
 import * as ElectronStore from 'electron-store'
-import { IPingdomHost } from './pingdom-store';
 
 const electronStore = new ElectronStore({ name: 'status-board' })
 
@@ -61,6 +62,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private plays: ReadonlyArray<IBoardGameGeekPlay> = []
   private rssItems: ReadonlyArray<IRssItem> = []
   private availablePingdomHosts: ReadonlyArray<IPingdomHost> = []
+  private hosts: IPingdomCheck | null = null
 
   private readonly darkSkyStore: DarkSkyStore
   private readonly upcomingStore: UpcomingStore
@@ -137,7 +139,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
       events: this.events,
       plays: this.plays,
       rssItems: this.rssItems,
-      availablePingdomHosts: this.availablePingdomHosts
+      availablePingdomHosts: this.availablePingdomHosts,
+      hosts: this.hosts
     }
   }
 
@@ -184,6 +187,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
         username: this.preferences.pingdom.username
       })
       this.pingdomStore.updateChecks()
+      this.pingdomStore.startPingdomUpdater()
 
     }
 
@@ -349,6 +353,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     }
     if (data.checks) {
       this.availablePingdomHosts = data.checks.checks || []
+      this.hosts = data.checks
     }
 
     this.emitUpdate()
