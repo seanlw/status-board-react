@@ -63,3 +63,7 @@ Depending on your distribution, you will need to run the following command:
 #### Electron
 
 If you recieve an error message regarding a invalid node module version with keytar, you will need to rebuild Electron by running `./node_modules/.bin/electron-rebuild` 
+
+## License
+
+**[MIT](LICENSE)**
