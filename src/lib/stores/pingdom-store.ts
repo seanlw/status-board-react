@@ -100,12 +100,9 @@ export class PingdomStore extends TypedBaseStore<IPingdomStoreState | null> {
   }
 
   public async getHosts(): Promise<any> {
-    if (!this.state || !this.state.checks) {
-      await this.updateChecks()
-      const hosts = this.state && this.state.checks ? this.state.checks.checks : []
-      return Promise.resolve(hosts)
-    }
-    return Promise.resolve(this.state.checks ? this.state.checks.checks : [])
+    await this.updateChecks()
+    const hosts = this.state && this.state.checks ? this.state.checks.checks : []
+    return Promise.resolve(hosts)
   }
 
   public startPingdomUpdater() {
