@@ -81,7 +81,11 @@ export class RssStore extends TypedBaseStore<IRssStoreState | null> {
       })
   }
 
-  private formatRss(rss: Document): ReadonlyArray<IRssItem> {
+  private formatRss(rss: Document | null): ReadonlyArray<IRssItem> {
+    if (!rss) {
+      return []
+    }
+
     const title = String(rss.getElementsByTagName('title')[0].childNodes[0].textContent)
     const items = rss.getElementsByTagName('item')
     let returnItems: Array<IRssItem> = []
