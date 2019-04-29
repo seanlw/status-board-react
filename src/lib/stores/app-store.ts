@@ -273,6 +273,9 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     electronStore.set('preferences', JSON.stringify(this.preferences))
 
+    this.rssStore.setState({ rssFeeds: feeds })
+    this.rssStore.updateRssFeeds()
+
     this.emitUpdate()
     return Promise.resolve()
   }
@@ -281,6 +284,9 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.preferences.rss = feeds
 
     electronStore.set('preferences', JSON.stringify(this.preferences))
+
+    this.boardGameGeekStore.setState({ username: username })
+    this.boardGameGeekStore.updatePlays()
 
     this.emitUpdate()
     return Promise.resolve()
@@ -306,6 +312,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
       username: username,
       password: password
     })
+    this.pingdomStore.updateChecks()
 
     this.emitUpdate()
     return Promise.resolve()
