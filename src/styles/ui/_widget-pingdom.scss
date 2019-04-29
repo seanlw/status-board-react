@@ -12,13 +12,14 @@
     &.warning {
       color: #e5c852;
     }
-    &.critical{
+
+    &.critical {
       color: #e3524f;
     }
   }
 
   .status {
-    font-family: 'FontAwesome';
+    font-family: 'Font Awesome 5 Free';
     font-size: 37px;
     line-height: 37px;
     width: 38px;
@@ -41,7 +42,7 @@
       content: "\f0d7";
     }
 
-    &.down + h2 {
+    &.down+h2 {
       color: #e3524f;
     }
   }
