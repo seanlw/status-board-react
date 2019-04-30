@@ -43,6 +43,10 @@ export class App extends React.Component<IAppProps, IAppState> {
       this.setState(state)
     })
 
+    props.appStore.onDidError(error => {
+      props.dispatcher.postError(error)
+    })
+
     ipcRenderer.on(
       'menu-event',
       (event: Electron.IpcMessageEvent, { name }: { name: MenuEvent }) => {

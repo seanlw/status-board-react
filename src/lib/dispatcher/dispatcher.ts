@@ -13,6 +13,10 @@ export class Dispatcher {
     return this.appStore.loadInitialState()
   }
 
+  public async postError(error: Error): Promise<void> {
+    return this.appStore._pushError(error)
+  }
+
   public showPopup(popup: Popup): Promise<void> {
     return this.appStore._showPopup(popup)
   }

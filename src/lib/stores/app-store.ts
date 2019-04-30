@@ -63,6 +63,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private rssItems: ReadonlyArray<IRssItem> = []
   private availablePingdomHosts: ReadonlyArray<IPingdomHost> = []
   private hosts: IPingdomCheck | null = null
+  private errors: ReadonlyArray<Error> = []
 
   private readonly darkSkyStore: DarkSkyStore
   private readonly upcomingStore: UpcomingStore
@@ -132,6 +133,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public getState(): IAppState {
     return {
+      errors: this.errors,
       preferences: this.preferences,
       datetime: this.datetime,
       currentPopup: this.currentPopup,
@@ -202,6 +204,24 @@ export class AppStore extends TypedBaseStore<IAppState> {
       this.emitUpdate()
       this.datetimeUpdater()
     }, 1000)
+  }
+
+  public async _pushError(error: Error): Promise<any> {
+    const newErrors = Array.from(this.errors)
+    newErrors.push(error)
+    this.errors = newErrors
+    this.emitUpdate()
+
+    console.error(error)
+
+    return Promise.resolve()
+  }
+
+  public _clearError(error: Error): Promise<void> {
+    this.errors = this.errors.filter(e => e !== error)
+    this.emitUpdate()
+
+    return Promise.resolve()
   }
 
   public async _showPopup(popup: Popup): Promise<void> {

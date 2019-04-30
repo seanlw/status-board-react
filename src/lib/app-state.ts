@@ -12,6 +12,7 @@ export type Popup =
   | { type: PopupType.Preferences }
 
 export interface IAppState {
+  readonly errors: ReadonlyArray<Error>
   readonly datetime: Date
   readonly currentPopup: Popup | null
   readonly preferences: IPreferences
