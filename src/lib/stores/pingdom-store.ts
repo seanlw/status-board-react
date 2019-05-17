@@ -1,6 +1,6 @@
 import { TypedBaseStore } from './base-store'
 import * as request from 'request-promise'
-import { TokenStore } from './token-store';
+import { TokenStore } from './token-store'
 
 export interface IPingdomStoreState {
   readonly apiKey: string

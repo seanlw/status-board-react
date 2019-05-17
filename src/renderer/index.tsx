@@ -1,8 +1,8 @@
 /// <reference path="../lib/globals.d.ts" />
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { App } from './app';
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import { App } from './app'
 import { Dispatcher } from '../lib/dispatcher'
 import {
   AppStore,

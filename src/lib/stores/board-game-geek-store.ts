@@ -36,7 +36,7 @@ export class BoardGameGeekStore extends TypedBaseStore<IBoardGameGeekStoreState 
 
     let plays: Array<IBoardGameGeekPlay> = []
 
-    let page = 1;
+    let page = 1
     do {
       const currentPlays = await this.getPlays(page)
       for (let play of currentPlays) {

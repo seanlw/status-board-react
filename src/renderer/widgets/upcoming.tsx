@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Panel } from '../panel';
+import * as React from 'react'
+import { Panel } from '../panel'
 import { PanelSizeType } from '../../lib/app-state'
-import { IUpcomingEvent } from '../../lib/stores';
+import { IUpcomingEvent } from '../../lib/stores'
 
 interface IUpcomingWidgetProps {
   readonly events: ReadonlyArray<IUpcomingEvent>

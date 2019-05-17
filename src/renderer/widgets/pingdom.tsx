@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Panel } from '../panel';
+import * as React from 'react'
+import { Panel } from '../panel'
 import { PanelSizeType } from '../../lib/app-state'
 import { IPingdomCheck, IPingdomHost } from '../../lib/stores'
 import { IServer } from '../../lib/preferences'
@@ -72,10 +72,10 @@ class IPingdomServer extends React.Component<IPingdomServerProps, {}> {
 
   private lastreponsetimeClass(time: number): string {
     if (time >= 1500 && time < 3000) {
-      return 'warning';
+      return 'warning'
     }
     if (time >= 3000) {
-      return 'critical';
+      return 'critical'
     }
     return ''
   }

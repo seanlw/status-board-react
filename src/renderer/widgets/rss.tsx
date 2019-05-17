@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Panel } from '../panel';
+import * as React from 'react'
+import { Panel } from '../panel'
 import { PanelSizeType } from '../../lib/app-state'
-import { IRssItem } from '../../lib/stores';
+import { IRssItem } from '../../lib/stores'
 
 interface IRSSWidgetProps {
   readonly items: ReadonlyArray<IRssItem>

@@ -4,7 +4,7 @@ import { DialogContent } from '../dialog'
 import { Row } from '../layout'
 import { TextBox, Select } from '../form'
 import { IServer } from '../../lib/preferences'
-import { IPingdomHost } from '../../lib/stores';
+import { IPingdomHost } from '../../lib/stores'
 
 interface IPingdomPreferencesProps {
   readonly apiKey: string

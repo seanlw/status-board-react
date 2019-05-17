@@ -92,7 +92,7 @@ export function buildDefaultMenu(): Menu {
     })
   }
 
-  return Menu.buildFromTemplate(template);
+  return Menu.buildFromTemplate(template)
 }
 
 type ClickHandler = (

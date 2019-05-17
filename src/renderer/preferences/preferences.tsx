@@ -7,12 +7,12 @@ import { TabBar } from '../tab-bar'
 import { Button, ButtonGroup } from '../button'
 import { DarkSkyPreferences } from './dark-sky'
 import { CountdownPreferences } from './countdown'
-import { UpcomingPreferences } from './upcoming';
-import { BoardGameGeekPreferences } from './boardgamegeek';
-import { RssFeedsPreferences } from './rss-feeds';
-import { TokenStore } from '../../lib/stores/token-store';
-import { PingdomPreferences } from './pingdom';
-import { IPingdomHost } from '../../lib/stores';
+import { UpcomingPreferences } from './upcoming'
+import { BoardGameGeekPreferences } from './boardgamegeek'
+import { RssFeedsPreferences } from './rss-feeds'
+import { TokenStore } from '../../lib/stores/token-store'
+import { PingdomPreferences } from './pingdom'
+import { IPingdomHost } from '../../lib/stores'
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher

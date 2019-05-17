@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Panel } from '../panel';
+import * as React from 'react'
+import { Panel } from '../panel'
 import { PanelSizeType } from '../../lib/app-state'
 
 interface ICalendarWidgetProps {

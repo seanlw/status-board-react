@@ -83,8 +83,8 @@ export class UpcomingStore extends TypedBaseStore<IUpcomingState | null> {
 
   private getGsIdFromUrl(url: string): string {
     if (!url) { return '' }
-    const found = url.match(/https:\/\/.*\/d\/([^\/]*)\//);
-    return (found === null) ? '' : found[1];
+    const found = url.match(/https:\/\/.*\/d\/([^\/]*)\//)
+    return (found === null) ? '' : found[1]
   }
 
 }

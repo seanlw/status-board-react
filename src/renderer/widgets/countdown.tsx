@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Panel } from '../panel';
+import * as React from 'react'
+import { Panel } from '../panel'
 import { PanelSizeType } from '../../lib/app-state'
 
 interface ICountdownWidgetProps {
@@ -65,10 +65,10 @@ export class CountdownWidget extends React.Component<ICountdownWidgetProps, ICou
   }
 
   private setTimeState(date: string, time: string, datetime: Date): ICountdownWidgetState {
-    const _second = 1000;
-    const _minute = 1000 * 60;
-    const _hour = 1000 * 60 * 60;
-    const _day = 1000 * 60 * 60 * 24;
+    const _second = 1000
+    const _minute = 1000 * 60
+    const _hour = 1000 * 60 * 60
+    const _day = 1000 * 60 * 60 * 24
 
     const timestamp = new Date(`${date} ${time}`)
     const diff = timestamp.getTime()

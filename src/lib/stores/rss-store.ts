@@ -1,6 +1,6 @@
 import { TypedBaseStore } from './base-store'
 import * as request from 'request-promise'
-import { IRssFeed } from '../preferences';
+import { IRssFeed } from '../preferences'
 
 export interface IRssStoreState {
   readonly rssFeeds: ReadonlyArray<IRssFeed>
@@ -129,11 +129,11 @@ export class RssStore extends TypedBaseStore<IRssStoreState | null> {
     const minutes = time.getMinutes()
     const ampm = hours >= 12 ? 'pm' : 'am'
 
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+    hours = hours % 12
+    hours = hours ? hours : 12
+    const minutesStr = minutes < 10 ? '0' + minutes : minutes
 
-    return hours + ':' + minutesStr + ' ' + ampm;
+    return hours + ':' + minutesStr + ' ' + ampm
   }
 
 }

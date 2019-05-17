@@ -1,6 +1,6 @@
 import { AppStore } from '../stores'
 import { Popup } from '../app-state'
-import { IRssFeed, IServer } from '../preferences';
+import { IRssFeed, IServer } from '../preferences'
 
 export class Dispatcher {
   private readonly appStore: AppStore
