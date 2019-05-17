@@ -6,7 +6,7 @@ import {
   IAppState,
   PopupType
 } from '../lib/app-state'
-
+import { IMenuItem } from '../lib/menu-item'
 import { MenuEvent } from '../main/menu'
 import { MoveHandle } from './window'
 import {
@@ -22,6 +22,10 @@ import {
 import { Row } from './layout'
 import { Preferences } from './preferences'
 import { CSSTransitionGroup } from 'react-transition-group'
+import {
+  showContextualMenu,
+  registerContextualMenuActionDispatcher
+} from './main-process-proxy'
 
 export const dialogTransitionEnterTimeout = 250
 export const dialogTransitionLeaveTimeout = 100
@@ -35,6 +39,8 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   public constructor(props: IAppProps) {
     super(props)
+
+    registerContextualMenuActionDispatcher()
 
     props.dispatcher.loadInitialState()
 
@@ -144,12 +150,25 @@ export class App extends React.Component<IAppProps, IAppState> {
     return null
   }
 
+  private onContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const items: IMenuItem[] = [
+      {
+        label: 'Preferences',
+        action: () => this.props.dispatcher.showPopup({ type: PopupType.Preferences })
+      }
+    ]
+    showContextualMenu.call(this, items)
+  }
+
   private onPopupDismissed = () => this.props.dispatcher.closePopup()
 
   public render() {
 
     return (
-      <div id="app-container">
+      <div id="app-container" onContextMenu={this.onContextMenu}>
         <MoveHandle />
         {this.renderWidgets()}
         {this.renderPopup()}

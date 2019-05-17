@@ -1,6 +1,17 @@
-import { app, Menu, ipcMain, shell } from 'electron'
+import {
+  app,
+  Menu,
+  ipcMain,
+  shell,
+  BrowserWindow
+} from 'electron'
 import { AppWindow } from './app-window'
-import { buildDefaultMenu, MenuEvent } from './menu'
+import {
+  buildDefaultMenu,
+  buildContextMenu,
+  MenuEvent
+} from './menu'
+import { IMenuItem } from '../lib/menu-item'
 
 let mainWindow: AppWindow | null = null
 
@@ -37,6 +48,18 @@ app.on('ready', () => {
     (event: Electron.IpcMessageEvent, { path }: { path: string }) => {
       const result = shell.openExternal(path)
       event.sender.send('open-external-result', { result })
+    }
+  )
+
+  ipcMain.on(
+    'show-contextual-menu',
+    (event: Electron.IpcMessageEvent, items: ReadonlyArray<IMenuItem>) => {
+      const menu = buildContextMenu(items, ix =>
+        event.sender.send('contextual-menu-action', ix)
+      )
+
+      const window = BrowserWindow.fromWebContents(event.sender)
+      menu.popup({ window: window })
     }
   )
 
